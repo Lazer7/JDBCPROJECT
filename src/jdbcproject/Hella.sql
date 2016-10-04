@@ -25,3 +25,4 @@ CREATE TABLE Publishers
   PublisherEmail     CHAR(30)          ,
   CONSTRAINT pk_publishers PRIMARY KEY (PublisherName ));
 
+INSERT INTO WRITINGGROUP VALUES('HellaHardWriters','DankMemes','1-2-2014','Philosophy');

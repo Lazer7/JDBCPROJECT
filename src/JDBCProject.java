@@ -1,6 +1,6 @@
 import java.sql.*;
 import java.util.Scanner;
-
+import java.util.*;
 /**
  *
  * @author Jimmy Chao/Alex Tol
@@ -16,7 +16,7 @@ public class JDBCProject {
     //The number indicates how wide to make the field.
     //The "s" denotes that it's a string.  All of our output in this test are 
     //strings, but that won't always be the case.
-    static final String displayFormat="%-5s%-15s%-15s%-15s\n";
+    static final String displayFormat="%-20s%-25s%-25s%-25s\n";
 // JDBC driver name and database URL
     static final String JDBC_DRIVER = "org.apache.derby.jdbc.ClientDriver";
     static String DB_URL = "jdbc:derby://localhost:1527/";
@@ -33,11 +33,45 @@ public class JDBCProject {
         else
             return input;
     }
-    
+    public static int displayMenu(Scanner in) 
+    {   
+        int UserInput=0;
+        System.out.print( "Please type in the number corresponding to your choice \n"+
+        "1) List all writing groups \n"+
+        "2) List all the data for a group specified by the user \n"+
+        "3) List all publishers \n"+
+        "4) List all the data for a publisher specified by the user \n"+
+        "5) List all book titles \n"+
+        "6) List all the data for a book specified by the user \n"+
+        "7) Insert a new book \n"+
+        "8) Insert a new publisher and update all book published by one publisher to be published by the new publisher \n"+
+        "9) Remove a book specified by the user \n");
+        do{
+            try
+            {
+                UserInput= in.nextInt();
+                if(UserInput<=0 || UserInput>9)
+                {
+                    throw new NumberFormatException();
+                }
+            }
+            catch(NumberFormatException el){
+                    System.out.println("Your input needs to be a number from 1 to 8");
+                    in.next();
+            }
+            catch(InputMismatchException el){
+                    System.out.println("Your input needs to be a number from 1 to 8");
+                    in.next();
+            }
+            
+        }while(UserInput<=0 || UserInput>9);
+        return UserInput;
+    }
     public static void main(String[] args) {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to 
         //remove that from the connection string.
+        int userInput;
         Scanner in = new Scanner(System.in);
         System.out.print("Name of the database (not the user account): ");
         DBNAME = in.nextLine();
@@ -56,14 +90,13 @@ public class JDBCProject {
             //STEP 3: Open a connection
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);
-
+            /*
             //STEP 4: Execute a query
             System.out.println("Creating statement...");
             stmt = conn.createStatement();
             String sql;
             sql = "SELECT au_id, au_fname, au_lname, phone FROM Authors";
             ResultSet rs = stmt.executeQuery(sql);
-
             //STEP 5: Extract data from result set
             System.out.printf(displayFormat, "ID", "First Name", "Last Name", "Phone #");
             while (rs.next()) {
@@ -76,9 +109,31 @@ public class JDBCProject {
                 //Display values
                 System.out.printf(displayFormat, 
                         dispNull(id), dispNull(first), dispNull(last), dispNull(phone));
+            }*/
+            
+            //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
+            String sql;
+            userInput=displayMenu(in);
+            stmt = conn.createStatement();
+            switch(userInput)
+            {
+               
+                case 1:
+                    Functions.DISPLAY(stmt);
+                    break;
+                case 2: break;
+                case 3: break;
+                case 4: break;
+                case 5: break;
+                case 6: break;
+                case 7: break;
+                case 8: break;
+                case 9: break;
             }
+            
+            
             //STEP 6: Clean-up environment
-            rs.close();
+            //rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
