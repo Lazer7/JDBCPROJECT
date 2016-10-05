@@ -33,7 +33,7 @@ public class Functions {
                 System.out.println("Would you like to continue press 'n' to stop or any key to continue");
                 contin=in.nextLine();
             }
-            else if((type==3)&&(check.equals("BookTitle")||check.equals("YearPublished")||check.equals("YearFormed")||check.equals("NumberPages")))
+            else if((type==3)&&(check.equals("BookTitle")||check.equals("YearPublished")||check.equals("YearFormed")||check.equals("NumberPages")||check.equals("PublisherName")||check.equals("GroupName")))
             {
                 userSelect.add(check);
                 System.out.println("Would you like to continue press 'n' to stop or any key to continue");
@@ -47,7 +47,7 @@ public class Functions {
     public static void DisplaySelected(Statement stmt, ArrayList<String> inputs,int type)
     {
         String sql;
-        sql="SELECT ";
+        sql="SELECT DISTINCT ";
         for(int i=0; i<inputs.size(); i++)
         {
             sql+= inputs.get(i)+" ";
@@ -63,6 +63,7 @@ public class Functions {
                 sql+="FROM Book";
                 break;     
         }
+        System.out.println(sql);
         try
         {
             ResultSet rs = stmt.executeQuery(sql);
@@ -76,8 +77,8 @@ public class Functions {
                     String currentColumn = rs.getString(inputs.get(i));
                     System.out.printf("%-30s", JDBCProject.dispNull(currentColumn));
                 }
-                System.out.println();
             }
+            System.out.println("\n -------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) 
@@ -109,6 +110,7 @@ public class Functions {
                 System.out.printf(JDBCProject.displayFormat, 
                 JDBCProject.dispNull(groupName), JDBCProject.dispNull(HeadWriter), JDBCProject.dispNull(YearFormed), JDBCProject.dispNull(Subject));
             }
+            System.out.println("-------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) 
@@ -136,6 +138,7 @@ public class Functions {
                 System.out.printf("%-20s%-20s%-25s%-35s\n", 
                 JDBCProject.dispNull(PublisherName), JDBCProject.dispNull(PublisherAddress), JDBCProject.dispNull(PublisherPhone), JDBCProject.dispNull(PublisherEmail));
             }
+            System.out.println("-------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) {
@@ -148,20 +151,17 @@ public class Functions {
                 
         try{
             String sql;
-            sql="SELECT BookTitle,YearPublished,NumberPages FROM Book";
+            sql="SELECT BookTitle FROM Book";
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf("%-25s%-35s%-35s\n", "BookTitle", "YearPublished", "NumberPages");
+            System.out.printf("%-20s\n","GroupName");
             while (rs.next())
             {
                 //Retrieve by column name
                 String BookTitle  = rs.getString("BookTitle");
-                String YearPublished  = rs.getString("YearPublished");
-                String NumberPages  = rs.getString("NumberPages");
-
                 //Display values
-                System.out.printf("%-20s%-20s%-25s\n", 
-                JDBCProject.dispNull(BookTitle), JDBCProject.dispNull(YearPublished), JDBCProject.dispNull(NumberPages));
+                System.out.printf("%-20s%\n",JDBCProject.dispNull(BookTitle));
             }
+            System.out.println("-------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) {

@@ -59,11 +59,10 @@ public class JDBCProject {
             }
             catch(NumberFormatException el){
                     System.out.println("Your input needs to be a number from 1 to 8");
-                    in.next();
+
             }
             catch(InputMismatchException el){
                     System.out.println("Your input needs to be a number from 1 to 8");
-                    in.next();
             }
             
         }while(UserInput<=0 || UserInput>10);
@@ -93,7 +92,6 @@ public class JDBCProject {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);       
             //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
-            boolean ContinueMenu=true;
             do{
                 userInput=displayMenu(in);
                 stmt = conn.createStatement();
@@ -126,11 +124,9 @@ public class JDBCProject {
                         break;
                     case 9: 
                         break;
-                    case 10: 
-                        ContinueMenu=false;
-                        break;
+
                 }
-            }while(ContinueMenu);
+            }while(userInput!=10);
             
             
             //STEP 6: Clean-up environment
