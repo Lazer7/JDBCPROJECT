@@ -92,31 +92,34 @@ public class JDBCProject {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);       
             //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
+
             do{
                 userInput=displayMenu(in);
                 stmt = conn.createStatement();
                 switch(userInput)
                 {
                     case 1:
-                        Functions.DisplayWritingGroup(stmt);
+                         userSelect.add("*");
+                         Functions.DisplaySelected(stmt, userSelect, 1);
                         break;
                     case 2:
-                        userSelect=Functions.getList(in, 1);
-                        Functions.DisplaySelected(stmt, userSelect, 1);
+                         userSelect=Functions.getList(in, 1);
+                         Functions.DisplaySelected(stmt, userSelect, 1);
                         break;
                     case 3: 
-                        Functions.DisplayPublishers(stmt);
+                          userSelect.add("*");
+                          Functions.DisplaySelected(stmt, userSelect, 2);
                         break;
                     case 4: 
-                        userSelect=Functions.getList(in, 2);
-                        Functions.DisplaySelected(stmt, userSelect, 2);
+                         userSelect=Functions.getList(in, 2);
+                         Functions.DisplaySelected(stmt, userSelect, 2);
                         break;
                     case 5: 
                         Functions.DisplayBook(stmt);
                         break;
                     case 6: 
-                        userSelect=Functions.getList(in, 3);
-                        Functions.DisplaySelected(stmt, userSelect, 3);
+                         userSelect=Functions.getList(in, 3);
+                         Functions.DisplaySelected(stmt, userSelect, 3);
                         break;
                     case 7: 
                         break;
@@ -125,15 +128,22 @@ public class JDBCProject {
                     case 9: 
                         break;
 
+                    
                 }
-            }while(userInput!=10);
+                
+                userSelect.clear();
+            }while(userInput != 10);
+
+
+               
+
             
             
             //STEP 6: Clean-up environment
             //rs.close();
             stmt.close();
             conn.close();
-        } catch (SQLException se) {
+          } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
         } catch (Exception e) {
