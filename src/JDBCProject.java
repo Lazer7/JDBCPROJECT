@@ -99,25 +99,27 @@ public class JDBCProject {
                 switch(userInput)
                 {
                     case 1:
-                        Functions.DisplayWritingGroup(stmt);
+                         userSelect.add("*");
+                         Functions.DisplaySelected(stmt, userSelect, 1);
                         break;
                     case 2:
-                        userSelect=Functions.getList(in, 1);
-                        Functions.DisplaySelected(stmt, userSelect, 1);
+                         userSelect=Functions.getList(in, 1);
+                         Functions.DisplaySelected(stmt, userSelect, 1);
                         break;
                     case 3: 
-                        Functions.DisplayPublishers(stmt);
+                          userSelect.add("*");
+                          Functions.DisplaySelected(stmt, userSelect, 2);
                         break;
                     case 4: 
-                        userSelect=Functions.getList(in, 2);
-                        Functions.DisplaySelected(stmt, userSelect, 2);
+                         userSelect=Functions.getList(in, 2);
+                         Functions.DisplaySelected(stmt, userSelect, 2);
                         break;
                     case 5: 
                         Functions.DisplayBook(stmt);
                         break;
                     case 6: 
-                        userSelect=Functions.getList(in, 3);
-                        Functions.DisplaySelected(stmt, userSelect, 3);
+                         userSelect=Functions.getList(in, 3);
+                         Functions.DisplaySelected(stmt, userSelect, 3);
                         break;
                     case 7: 
                         break;
