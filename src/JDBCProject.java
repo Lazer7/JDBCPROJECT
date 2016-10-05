@@ -92,6 +92,7 @@ public class JDBCProject {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);       
             //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
+
             do{
                 userInput=displayMenu(in);
                 stmt = conn.createStatement();
@@ -125,15 +126,22 @@ public class JDBCProject {
                     case 9: 
                         break;
 
+                    
                 }
-            }while(userInput!=10);
+                
+                userSelect.clear();
+            }while(userInput != 10);
+
+
+               
+
             
             
             //STEP 6: Clean-up environment
             //rs.close();
             stmt.close();
             conn.close();
-        } catch (SQLException se) {
+          } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
         } catch (Exception e) {
