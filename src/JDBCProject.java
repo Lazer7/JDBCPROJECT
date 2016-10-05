@@ -1,3 +1,6 @@
+
+
+
 import java.sql.*;
 import java.util.Scanner;
 import java.util.*;
@@ -59,11 +62,11 @@ public class JDBCProject {
             }
             catch(NumberFormatException el){
                     System.out.println("Your input needs to be a number from 1 to 8");
-                    in.next();
+                   
             }
             catch(InputMismatchException el){
                     System.out.println("Your input needs to be a number from 1 to 8");
-                    in.next();
+                   
             }
             
         }while(UserInput<=0 || UserInput>10);
@@ -93,28 +96,30 @@ public class JDBCProject {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);       
             //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
-            boolean ContinueMenu=true;
+           
             do{
                 userInput=displayMenu(in);
                 stmt = conn.createStatement();
                 switch(userInput)
                 {
                     case 1:
-                        Functions.DisplayWritingGroup(stmt);
+                        userSelect.add("*");
+                        Functions.DisplaySelected(stmt, userSelect, 1);
                         break;
                     case 2:
                         userSelect=Functions.getList(in, 1);
                         Functions.DisplaySelected(stmt, userSelect, 1);
                         break;
                     case 3: 
-                        Functions.DisplayPublishers(stmt);
+                         userSelect.add("*");
+                         Functions.DisplaySelected(stmt, userSelect, 2);
                         break;
                     case 4: 
                         userSelect=Functions.getList(in, 2);
                         Functions.DisplaySelected(stmt, userSelect, 2);
                         break;
                     case 5: 
-                        Functions.DisplayBook(stmt);
+                        
                         break;
                     case 6: 
                         userSelect=Functions.getList(in, 3);
@@ -126,11 +131,11 @@ public class JDBCProject {
                         break;
                     case 9: 
                         break;
-                    case 10: 
-                        ContinueMenu=false;
-                        break;
+                    
                 }
-            }while(ContinueMenu);
+                
+                userSelect.clear();
+            }while(userInput != 10);
             
             
             //STEP 6: Clean-up environment
