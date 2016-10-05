@@ -37,7 +37,7 @@ public class Functions
                 System.out.println("Would you like to continue press 'n' to stop or any key to continue");
                 contin=in.nextLine();
             }
-            else if((type==3)&&(check.equals("BookTitle")||check.equals("YearPublished")||check.equals("YearFormed")||check.equals("NumberPages")))
+            else if((type==3)&&(check.equals("BookTitle")||check.equals("YearPublished")||check.equals("YearFormed")||check.equals("NumberPages")||check.equals("PublisherName")||check.equals("GroupName")))
             {
                 userSelect.add(check);
                 System.out.println("Would you like to continue press 'n' to stop or any key to continue");
@@ -68,6 +68,7 @@ public class Functions
                 sql+="FROM Book";
                 break;     
         }
+        System.out.println(sql);
         try
         {
             ResultSet rs = stmt.executeQuery(sql);
@@ -82,8 +83,8 @@ public class Functions
                     String currentColumn = rs.getString(inputs.get(i));
                     System.out.printf("%-30s", JDBCProject.dispNull(currentColumn));
                 }
-                System.out.println();
             }
+            System.out.println("\n -------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) 
@@ -95,6 +96,7 @@ public class Functions
     
     }
     
+<<<<<<< HEAD
     public static void insertBook()
     {
         String newBookEntry;
@@ -108,6 +110,86 @@ public class Functions
                     
                 }
         
+=======
+    public static void DisplayWritingGroup(Statement stmt)
+    {
+                
+        try
+        {
+            String sql;
+            sql="SELECT * FROM WritingGroup";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.printf(JDBCProject.displayFormat, "Group Name", "HeadWriter", "YearFormed", "Subject");
+            while (rs.next())
+            {
+                //Retrieve by column name
+                String groupName = rs.getString("GroupName");
+                String HeadWriter = rs.getString("HeadWriter");
+                String YearFormed = rs.getString("YearFormed");
+                String Subject = rs.getString("Subject");
+                //Display values
+                System.out.printf(JDBCProject.displayFormat, 
+                JDBCProject.dispNull(groupName), JDBCProject.dispNull(HeadWriter), JDBCProject.dispNull(YearFormed), JDBCProject.dispNull(Subject));
+            }
+            System.out.println("-------------------------------------------------------------------------");
+            rs.close();
+        }
+        catch (SQLException se) 
+        {
+             //Handle errors for JDBC
+            se.printStackTrace();
+        }
+    }
+    public static void DisplayPublishers(Statement stmt)
+    {
+                
+        try{
+            String sql;
+            sql="SELECT * FROM Publishers";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.printf("%-25s%-35s%-35s%-25s\n", "Publisher Name", "PublisherAddress", "PublisherPhone", "PublisherEmail");
+            while (rs.next())
+            {
+                //Retrieve by column name
+                String PublisherName  = rs.getString("PublisherName");
+                String PublisherAddress  = rs.getString("PublisherAddress");
+                String PublisherPhone  = rs.getString("PublisherPhone");
+                String PublisherEmail = rs.getString("PublisherEmail");
+                //Display values
+                System.out.printf("%-20s%-20s%-25s%-35s\n", 
+                JDBCProject.dispNull(PublisherName), JDBCProject.dispNull(PublisherAddress), JDBCProject.dispNull(PublisherPhone), JDBCProject.dispNull(PublisherEmail));
+            }
+            System.out.println("-------------------------------------------------------------------------");
+            rs.close();
+        }
+        catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+    }
+    public static void DisplayBook(Statement stmt)
+    {
+                
+        try{
+            String sql;
+            sql="SELECT BookTitle FROM Book";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.printf("%-20s\n","GroupName");
+            while (rs.next())
+            {
+                //Retrieve by column name
+                String BookTitle  = rs.getString("BookTitle");
+                //Display values
+                System.out.printf("%-20s%\n",JDBCProject.dispNull(BookTitle));
+            }
+            System.out.println("-------------------------------------------------------------------------");
+            rs.close();
+        }
+        catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+>>>>>>> refs/remotes/origin/master
     }
     
     
