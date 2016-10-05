@@ -1,3 +1,5 @@
+
+
 import java.sql.*;
 import java.util.*;
 
@@ -12,13 +14,15 @@ import java.util.*;
  *
  * @author Jimmy
  */
-public class Functions {
+public class Functions 
+{
     public static ArrayList getList(Scanner in,int type)
     {
         ArrayList<String> userSelect = new ArrayList<String>();
         String contin=" ";
         String check;
-        while(!contin.equals("n")){
+        while(!contin.equals("n"))
+        {
             System.out.println("Type in the words you want to see");
             check= in.next();
             if((type==1)&&(check.equals("GroupName")||check.equals("HeadWriter")||check.equals("YearFormed")||check.equals("Subject")))
@@ -44,6 +48,7 @@ public class Functions {
         }   
         return userSelect;
     }
+    
     public static void DisplaySelected(Statement stmt, ArrayList<String> inputs,int type)
     {
         String sql;
@@ -67,7 +72,8 @@ public class Functions {
         try
         {
             ResultSet rs = stmt.executeQuery(sql);
-            for(int i=0; i<inputs.size(); i++){
+            for(int i=0; i<inputs.size(); i++)
+            {
                 System.out.printf("%-30s", inputs.get(i));
             }
             System.out.println("");
@@ -90,6 +96,21 @@ public class Functions {
     
     }
     
+<<<<<<< HEAD
+    public static void insertBook()
+    {
+        String newBookEntry;
+        Scanner in = new Scanner(System.in);
+            
+            //get 
+            System.out.println("Which writing Group wrote this book?");
+            
+                try
+                {
+                    
+                }
+        
+=======
     public static void DisplayWritingGroup(Statement stmt)
     {
                 
@@ -168,5 +189,9 @@ public class Functions {
             //Handle errors for JDBC
             se.printStackTrace();
         }
+>>>>>>> refs/remotes/origin/master
     }
+    
+    
+   
 }
