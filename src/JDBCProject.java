@@ -45,12 +45,14 @@ public class JDBCProject {
         "6) List all the data for a book specified by the user \n"+
         "7) Insert a new book \n"+
         "8) Insert a new publisher and update all book published by one publisher to be published by the new publisher \n"+
-        "9) Remove a book specified by the user \n");
+        "9) Remove a book specified by the user \n"+
+        "10) Exit \n"+
+        "--------------------------------------------------------------------------------------------------------------------\n");
         do{
             try
             {
                 UserInput= in.nextInt();
-                if(UserInput<=0 || UserInput>9)
+                if(UserInput<=0 || UserInput>10)
                 {
                     throw new NumberFormatException();
                 }
@@ -64,7 +66,7 @@ public class JDBCProject {
                     in.next();
             }
             
-        }while(UserInput<=0 || UserInput>9);
+        }while(UserInput<=0 || UserInput>10);
         return UserInput;
     }
     public static void main(String[] args) {
@@ -89,47 +91,40 @@ public class JDBCProject {
 
             //STEP 3: Open a connection
             System.out.println("Connecting to database...");
-            conn = DriverManager.getConnection(DB_URL);
-            /*
-            //STEP 4: Execute a query
-            System.out.println("Creating statement...");
-            stmt = conn.createStatement();
-            String sql;
-            sql = "SELECT au_id, au_fname, au_lname, phone FROM Authors";
-            ResultSet rs = stmt.executeQuery(sql);
-            //STEP 5: Extract data from result set
-            System.out.printf(displayFormat, "ID", "First Name", "Last Name", "Phone #");
-            while (rs.next()) {
-                //Retrieve by column name
-                String id = rs.getString("au_id");
-                String phone = rs.getString("phone");
-                String first = rs.getString("au_fname");
-                String last = rs.getString("au_lname");
-
-                //Display values
-                System.out.printf(displayFormat, 
-                        dispNull(id), dispNull(first), dispNull(last), dispNull(phone));
-            }*/
-            
+            conn = DriverManager.getConnection(DB_URL);       
             //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
-            String sql;
-            userInput=displayMenu(in);
-            stmt = conn.createStatement();
-            switch(userInput)
-            {
-               
-                case 1:
-                    Functions.DISPLAY(stmt);
-                    break;
-                case 2: break;
-                case 3: break;
-                case 4: break;
-                case 5: break;
-                case 6: break;
-                case 7: break;
-                case 8: break;
-                case 9: break;
-            }
+            boolean ContinueMenu=true;
+            do{
+                userInput=displayMenu(in);
+                stmt = conn.createStatement();
+                switch(userInput)
+                {
+                    case 1:
+                        Functions.DisplayWritingGroup(stmt);
+                        break;
+                    case 2:
+                        break;
+                    case 3: 
+                        Functions.DisplayPublishers(stmt);
+                        break;
+                    case 4: 
+                        break;
+                    case 5: 
+                        Functions.DisplayBook(stmt);
+                        break;
+                    case 6: 
+                        break;
+                    case 7: 
+                        break;
+                    case 8: 
+                        break;
+                    case 9: 
+                        break;
+                    case 10: 
+                        ContinueMenu=false;
+                        break;
+                }
+            }while(ContinueMenu);
             
             
             //STEP 6: Clean-up environment
