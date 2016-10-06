@@ -18,33 +18,41 @@ public class Functions {
         ArrayList<String> userSelect = new ArrayList<String>();
         String contin=" ";
         String check;
+        boolean firstinput=true;
         while(!contin.equals("n")){
             System.out.println("Type in the words you want to see");
             check= in.next();
-            if((type==1)&&(check.equals("GroupName")||check.equals("HeadWriter")||check.equals("YearFormed")||check.equals("Subject")))
+            if((type==1||type==4)&&(check.equals("GroupName")||check.equals("HeadWriter")||check.equals("YearFormed")||check.equals("Subject")))
             {
                 userSelect.add(check);
                 System.out.println("Would you like to continue press 'n' to stop or any key to continue");
                 contin=in.nextLine();
             }
-            else if((type==2)&&(check.equals("PublisherName")||check.equals("PublisherAddress")||check.equals("PublisherPhone")||check.equals("PublisherEmail")))
+            else if((type==2||type==4)&&(check.equals("PublisherName")||check.equals("PublisherAddress")||check.equals("PublisherPhone")||check.equals("PublisherEmail")))
             {
                 userSelect.add(check);
                 System.out.println("Would you like to continue press 'n' to stop or any key to continue");
                 contin=in.nextLine();
             }
-            else if((type==3)&&(check.equals("BookTitle")||check.equals("YearPublished")||check.equals("YearFormed")||check.equals("NumberPages")||check.equals("PublisherName")||check.equals("GroupName")))
+            else if((type==3||type==4)&&(check.equals("BookTitle")||check.equals("YearPublished")||check.equals("YearFormed")||check.equals("NumberPages")||check.equals("PublisherName")||check.equals("GroupName")))
             {
                 userSelect.add(check);
                 System.out.println("Would you like to continue press 'n' to stop or any key to continue");
                 contin=in.nextLine();
+            }
+            else if((type==4)&&check.equals("*")||check.equals("all")&&firstinput)
+            {
+                userSelect.add("*");
+                System.out.println("Displaying all variables...");
+                break;
             }
             else{System.out.println("Invalid input");}
             contin=in.nextLine();
+            firstinput=false;
         }   
         return userSelect;
     }
-    public static void DisplaySelected(Statement stmt, ArrayList<String> inputs,int type)
+    public static void DisplaySelected(Statement stmt, ArrayList<String> inputs,int type,String book)
     {
         String sql;
         sql="SELECT DISTINCT ";
@@ -62,8 +70,10 @@ public class Functions {
             case 3:
                 sql+="FROM Book";
                 break;     
+            case 4:
+                sql ="SELECT * FROM Book NATURAL JOIN PUBLISHERS NATURAL JOIN WRITINGGROUP WHERE BookTitle  = "+ "\'" +book+ "\'";
+                break;
         }
-        System.out.println(sql);
         try
         {
             ResultSet rs = stmt.executeQuery(sql);
@@ -146,27 +156,86 @@ public class Functions {
             se.printStackTrace();
         }
     }
-    public static void DisplayBook(Statement stmt)
+    public static ArrayList<String> DisplayBook(Statement stmt,Boolean getList)
     {
-                
+        ArrayList<String> bookList= new ArrayList<String>();
         try{
             String sql;
             sql="SELECT BookTitle FROM Book";
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf("%-20s\n","GroupName");
+            if(!getList){System.out.printf("%-20s\n","Book Titles");}
             while (rs.next())
             {
-                //Retrieve by column name
-                String BookTitle  = rs.getString("BookTitle");
-                //Display values
-                System.out.printf("%-20s%\n",JDBCProject.dispNull(BookTitle));
+                if(!getList){
+                    //Retrieve by column name
+                    String BookTitle  = rs.getString("BookTitle");
+                    //Display values
+                    System.out.printf("%-20s\n",JDBCProject.dispNull(BookTitle));
+                }
+                else
+                {
+                    bookList.add(rs.getString("BookTitle"));
+                }
             }
-            System.out.println("-------------------------------------------------------------------------");
+            if(!getList){System.out.println("-------------------------------------------------------------------------");}
             rs.close();
         }
         catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
         }
+        
+        return bookList;
     }
+    public static void DisplayBookInformation(Statement stmt)
+    {
+        Scanner in=new Scanner(System.in);
+        System.out.println("Please enter a book title");
+        String input= in.nextLine();
+        ArrayList<String> bookList=DisplayBook(stmt,true);
+        boolean bookfound=false;
+        for(int i=0; i<bookList.size(); i++)
+        {
+            String x=bookList.get(i);
+            if((input.trim().equals(x.trim()))){bookfound=true;}
+        }
+        if(bookfound)
+        {
+            ArrayList<String> Select=getList(in,4);
+            if((Select.get(0).equals("*"))){
+                try{
+                    String sql ="SELECT * FROM Book NATURAL JOIN PUBLISHERS NATURAL JOIN WRITINGGROUP WHERE BookTitle  = "+ "\'" +input+ "\'";
+                    System.out.println(sql);
+                    ResultSet rs = stmt.executeQuery(sql);
+                    System.out.printf("%-30s%-20s%-20s%-20s%-20s%-20s%-20s%-30s%-30s%-30s%-20s\n","BookTitle","YearPublished","NumberPages","GroupName","HeadWriter","YearFormed","Subject","PublisherName","PublisherAddress","PublisherPhone","PublisherEmail");
+                    while(rs.next())
+                    {
+                        String BookTitle=rs.getString("BookTitle");               
+                        String YearPublished=rs.getString("YearPublished");         
+                        String NumberPages=rs.getString("NumberPages"); 
+                        String groupName = rs.getString("GroupName");
+                        String HeadWriter = rs.getString("HeadWriter");
+                        String YearFormed = rs.getString("YearFormed");
+                        String Subject = rs.getString("Subject");
+                        String PublisherName  = rs.getString("PublisherName");
+                        String PublisherAddress  = rs.getString("PublisherAddress");
+                        String PublisherPhone  = rs.getString("PublisherPhone");
+                        String PublisherEmail = rs.getString("PublisherEmail");
+                        System.out.printf("%-30s%-20s%-20s%-20s%-20s%-20s%-20s%-20s%-2s%-5s%-5s\n",JDBCProject.dispNull(BookTitle),JDBCProject.dispNull(YearPublished),JDBCProject.dispNull(NumberPages)
+                                ,JDBCProject.dispNull(groupName),JDBCProject.dispNull(HeadWriter),JDBCProject.dispNull(YearFormed),JDBCProject.dispNull(Subject)
+                                ,JDBCProject.dispNull(PublisherName),JDBCProject.dispNull(PublisherAddress),JDBCProject.dispNull(PublisherPhone),JDBCProject.dispNull(PublisherEmail));
+                    }
+                    System.out.println("-------------------------------------------------------------------------");
+                    rs.close();
+                }
+                catch (SQLException se) {
+                    //Handle errors for JDBC
+                    se.printStackTrace();
+                }
+            }
+            else{DisplaySelected(stmt, Select,4,input);}
+        }
+        else{System.out.println("Book not Found");}
+    }
+    
 }

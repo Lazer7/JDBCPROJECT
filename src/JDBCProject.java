@@ -87,7 +87,7 @@ public class JDBCProject {
         try {
             //STEP 2: Register JDBC driver
             Class.forName("org.apache.derby.jdbc.ClientDriver");
-            ArrayList<String> userSelect = new ArrayList<String>();
+            
             //STEP 3: Open a connection
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);       
@@ -96,30 +96,28 @@ public class JDBCProject {
             do{
                 userInput=displayMenu(in);
                 stmt = conn.createStatement();
+                ArrayList<String> userSelect = new ArrayList<String>();
                 switch(userInput)
                 {
                     case 1:
-                         userSelect.add("*");
-                         Functions.DisplaySelected(stmt, userSelect, 1);
+                        Functions.DisplayWritingGroup(stmt);
                         break;
                     case 2:
                          userSelect=Functions.getList(in, 1);
-                         Functions.DisplaySelected(stmt, userSelect, 1);
+                         Functions.DisplaySelected(stmt, userSelect, 1,"");
                         break;
                     case 3: 
-                          userSelect.add("*");
-                          Functions.DisplaySelected(stmt, userSelect, 2);
+                          Functions.DisplayPublishers(stmt);
                         break;
                     case 4: 
                          userSelect=Functions.getList(in, 2);
-                         Functions.DisplaySelected(stmt, userSelect, 2);
+                         Functions.DisplaySelected(stmt, userSelect, 2,"");
                         break;
                     case 5: 
-                        Functions.DisplayBook(stmt);
+                        Functions.DisplayBook(stmt,false);
                         break;
                     case 6: 
-                         userSelect=Functions.getList(in, 3);
-                         Functions.DisplaySelected(stmt, userSelect, 3);
+                        Functions.DisplayBookInformation(stmt);
                         break;
                     case 7: 
                         break;
