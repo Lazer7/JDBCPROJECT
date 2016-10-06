@@ -12,7 +12,8 @@ import java.util.*;
  *
  * @author Jimmy
  */
-public class Functions {
+public class Functions 
+{
     public static ArrayList getList(Scanner in,int type)
     {
         ArrayList<String> userSelect = new ArrayList<String>();
@@ -77,7 +78,8 @@ public class Functions {
         try
         {
             ResultSet rs = stmt.executeQuery(sql);
-            for(int i=0; i<inputs.size(); i++){
+            for(int i=0; i<inputs.size(); i++)
+            {
                 System.out.printf("%-30s", inputs.get(i));
             }
             System.out.println("");
@@ -87,8 +89,8 @@ public class Functions {
                     String currentColumn = rs.getString(inputs.get(i));
                     System.out.printf("%-30s", JDBCProject.dispNull(currentColumn));
                 }
+                System.out.println();
             }
-            System.out.println("\n -------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) 
@@ -99,62 +101,61 @@ public class Functions {
         
     
     }
-    
-    public static void DisplayWritingGroup(Statement stmt)
+    //cherry pick everything under this comment
+    public static void insertBook(Statement stmt)
     {
-                
-        try
-        {
-            String sql;
-            sql="SELECT * FROM WritingGroup";
-            ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf(JDBCProject.displayFormat, "Group Name", "HeadWriter", "YearFormed", "Subject");
-            while (rs.next())
+        String query = "INSERT INTO Book VALUES(";
+        Scanner in = new Scanner(System.in);
+            
+            try
             {
-                //Retrieve by column name
-                String groupName = rs.getString("GroupName");
-                String HeadWriter = rs.getString("HeadWriter");
-                String YearFormed = rs.getString("YearFormed");
-                String Subject = rs.getString("Subject");
-                //Display values
-                System.out.printf(JDBCProject.displayFormat, 
-                JDBCProject.dispNull(groupName), JDBCProject.dispNull(HeadWriter), JDBCProject.dispNull(YearFormed), JDBCProject.dispNull(Subject));
+            //get writingGroup
+            System.out.println("Which writing Group wrote this book?");
+            query += "'" + in.nextLine() + "',";
+            System.out.println("What is the title of the book?");
+            query += "'" + in.nextLine() + "',";
+            System.out.println("Who published it?");
+            query += "'" + in.nextLine() + "',";
+            System.out.println("When was it published?");
+            query += "'" + in.nextLine() + "',";
+            System.out.println("How many pages does it have?");
+            query += in.nextInt() + ")";
+            System.out.println(query);
+            
+            stmt.executeUpdate(query);
+           
+            
+            
             }
-            System.out.println("-------------------------------------------------------------------------");
-            rs.close();
-        }
-        catch (SQLException se) 
-        {
+            
+            catch (SQLException se) 
+            {
              //Handle errors for JDBC
             se.printStackTrace();
-        }
-    }
-    public static void DisplayPublishers(Statement stmt)
-    {
-                
-        try{
-            String sql;
-            sql="SELECT * FROM Publishers";
-            ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf("%-25s%-35s%-35s%-25s\n", "Publisher Name", "PublisherAddress", "PublisherPhone", "PublisherEmail");
-            while (rs.next())
-            {
-                //Retrieve by column name
-                String PublisherName  = rs.getString("PublisherName");
-                String PublisherAddress  = rs.getString("PublisherAddress");
-                String PublisherPhone  = rs.getString("PublisherPhone");
-                String PublisherEmail = rs.getString("PublisherEmail");
-                //Display values
-                System.out.printf("%-20s%-20s%-25s%-35s\n", 
-                JDBCProject.dispNull(PublisherName), JDBCProject.dispNull(PublisherAddress), JDBCProject.dispNull(PublisherPhone), JDBCProject.dispNull(PublisherEmail));
             }
-            System.out.println("-------------------------------------------------------------------------");
-            rs.close();
+            
+               
+        
+    }
+    
+    public static void removeBook(Statement stmt)
+    {
+        String query = "DELETE FROM BOOK WHERE BOOKTITLE = ";
+        Scanner in = new Scanner(System.in);
+        
+        try
+        {
+        System.out.println("What book do you want to remove?");
+        query += "'" + in.nextLine() + "'";
+        stmt.executeUpdate(query);
         }
-        catch (SQLException se) {
-            //Handle errors for JDBC
+        
+        catch (SQLException se) 
+            {
+             //Handle errors for JDBC
             se.printStackTrace();
-        }
+            }
+        
     }
     public static ArrayList<String> DisplayBook(Statement stmt,Boolean getList)
     {

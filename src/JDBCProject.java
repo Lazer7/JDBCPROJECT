@@ -59,10 +59,11 @@ public class JDBCProject {
             }
             catch(NumberFormatException el){
                     System.out.println("Your input needs to be a number from 1 to 8");
-
+                   
             }
             catch(InputMismatchException el){
                     System.out.println("Your input needs to be a number from 1 to 8");
+                   
             }
             
         }while(UserInput<=0 || UserInput>10);
@@ -92,7 +93,7 @@ public class JDBCProject {
             System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(DB_URL);       
             //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
-
+           
             do{
                 userInput=displayMenu(in);
                 stmt = conn.createStatement();
@@ -120,28 +121,26 @@ public class JDBCProject {
                         Functions.DisplayBookInformation(stmt);
                         break;
                     case 7: 
+                            Functions.insertBook(stmt); //cherry pick this
                         break;
-                    case 8: 
+                    case 8:
+                            Functions.updatePublisher(stmt);//cherry pick this
                         break;
                     case 9: 
+                            Functions.removeBook(stmt);// cherry pick this
                         break;
-
                     
                 }
                 
                 userSelect.clear();
             }while(userInput != 10);
-
-
-               
-
             
             
             //STEP 6: Clean-up environment
             //rs.close();
             stmt.close();
             conn.close();
-          } catch (SQLException se) {
+        } catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
         } catch (Exception e) {
