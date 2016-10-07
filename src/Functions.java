@@ -148,16 +148,47 @@ public class Functions
             }
         
     }
-    
+    //just pick this entire function
     public static void updatePublisher(Statement stmt)
     {
-        String query1 = "SELECT PUBLISHERNAME FROM WRITINGGROUP WHERE PUBLISHERNAME = ";
+        String query1 = "SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = ";
+        String target;
         ResultSet rs;
         Scanner in = new Scanner(System.in);
         
-        System.out.println("What Publisher would you like to update?");
+        try
+        {
+            System.out.println("What Publisher would you like to update?");
+            target = in.nextLine();
+            query1 += "'" + target + "'";
+            
+            rs = stmt.executeQuery(query1);
+            
+            if(rs.next())
+            {
+                String update1 = "UPDATE PUBLISHERS SET PUBLISHERNAME = ";
+                String update2 = "UPDATE BOOK SET PUBLISHERNAME = ";
+                System.out.println("What publisher would you like to replace them with?");
+                String target2 = in.nextLine();
+                update1 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
+                update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
+                
+                
+                stmt.executeUpdate(update1);
+                stmt.executeUpdate(update2);
+            }
+            
+            else
+            {
+                System.out.println("This publisher does not exist");
+            }
+        }
+        
+        catch (SQLException se) 
+            {
+             //Handle errors for JDBC
+            se.printStackTrace();
+            }
+        
+        
     }
-    
-    
-   
-}
