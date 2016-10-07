@@ -206,7 +206,6 @@ public class Functions
             if((Select.get(0).equals("*"))){
                 try{
                     String sql ="SELECT * FROM Book NATURAL JOIN PUBLISHERS NATURAL JOIN WRITINGGROUP WHERE BookTitle  = "+ "\'" +input+ "\'";
-                    System.out.println(sql);
                     ResultSet rs = stmt.executeQuery(sql);
                     System.out.printf("%-30s%-20s%-20s%-20s%-20s%-20s%-20s%-30s%-30s%-30s%-20s\n","BookTitle","YearPublished","NumberPages","GroupName","HeadWriter","YearFormed","Subject","PublisherName","PublisherAddress","PublisherPhone","PublisherEmail");
                     while(rs.next())
