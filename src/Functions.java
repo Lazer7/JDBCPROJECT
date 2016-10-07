@@ -238,5 +238,68 @@ public class Functions
         }
         else{System.out.println("Book not Found");}
     }
-    
+    public static void updatePublisher(Statement stmt)
+    {
+        String query1 = "SELECT PUBLISHERNAME FROM WRITINGGROUP WHERE PUBLISHERNAME = ";
+        ResultSet rs;
+        Scanner in = new Scanner(System.in);
+        
+        System.out.println("What Publisher would you like to update?");
+    }
+        public static void DisplayWritingGroup(Statement stmt)
+    {
+                
+        try
+        {
+            String sql;
+            sql="SELECT * FROM WritingGroup";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.printf(JDBCProject.displayFormat, "Group Name", "HeadWriter", "YearFormed", "Subject");
+            while (rs.next())
+            {
+                //Retrieve by column name
+                String groupName = rs.getString("GroupName");
+                String HeadWriter = rs.getString("HeadWriter");
+                String YearFormed = rs.getString("YearFormed");
+                String Subject = rs.getString("Subject");
+                //Display values
+                System.out.printf(JDBCProject.displayFormat, 
+                JDBCProject.dispNull(groupName), JDBCProject.dispNull(HeadWriter), JDBCProject.dispNull(YearFormed), JDBCProject.dispNull(Subject));
+            }
+            System.out.println("-------------------------------------------------------------------------");
+            rs.close();
+        }
+        catch (SQLException se) 
+        {
+             //Handle errors for JDBC
+            se.printStackTrace();
+        }
+    }
+    public static void DisplayPublishers(Statement stmt)
+    {
+                
+        try{
+            String sql;
+            sql="SELECT * FROM Publishers";
+            ResultSet rs = stmt.executeQuery(sql);
+            System.out.printf("%-25s%-35s%-35s%-25s\n", "Publisher Name", "PublisherAddress", "PublisherPhone", "PublisherEmail");
+            while (rs.next())
+            {
+                //Retrieve by column name
+                String PublisherName  = rs.getString("PublisherName");
+                String PublisherAddress  = rs.getString("PublisherAddress");
+                String PublisherPhone  = rs.getString("PublisherPhone");
+                String PublisherEmail = rs.getString("PublisherEmail");
+                //Display values
+                System.out.printf("%-20s%-20s%-25s%-35s\n", 
+                JDBCProject.dispNull(PublisherName), JDBCProject.dispNull(PublisherAddress), JDBCProject.dispNull(PublisherPhone), JDBCProject.dispNull(PublisherEmail));
+            }
+            System.out.println("-------------------------------------------------------------------------");
+            rs.close();
+        }
+        catch (SQLException se) {
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }
+    }
 }
