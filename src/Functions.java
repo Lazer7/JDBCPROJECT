@@ -244,6 +244,7 @@ public static void insertBook(Statement stmt)
         
     }
     
+ 
     public static void removeBook(Statement stmt)
     {
 		//Prepare the first part of the query
@@ -254,7 +255,19 @@ public static void insertBook(Statement stmt)
         {
         System.out.println("What book do you want to remove?");
 		//get title, append query
-        query += "'" + in.nextLine() + "'";
+        String bookTitle = in.nextLine();
+        ResultSet rs = stmt.executeQuery("SELECT BOOKTITLE FROM BOOK WHERE BOOKTITLE = " +"'" + bookTitle + "'");
+            //check if books exists
+            if(rs.next())
+            {
+            query += "'" + bookTitle + "'";
+            }
+            
+            else //show error message and exit function if book DNE
+            {
+                System.out.println("The book you specified does not exist\n");
+                return;
+            }
 		
 		//execute query
         stmt.executeUpdate(query);
@@ -263,7 +276,7 @@ public static void insertBook(Statement stmt)
         catch (SQLException se) 
             {
              //Handle errors for JDBC
-            se.printStackTrace();
+            System.out.println("The book you specified does not exist");
             }
         
     }
