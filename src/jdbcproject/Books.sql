@@ -35,7 +35,7 @@ INSERT INTO WRITINGGROUP VALUES('I Want To Write'       ,'Sarah-Chan'       ,'2/
 INSERT INTO WRITINGGROUP VALUES('The Feel Train'        ,'Senpai Kun'       ,'3/4/2015'  ,'Fiction');
 INSERT INTO WRITINGGROUP VALUES('I Tried So Hard'       ,'Alex Tol'         ,'1/2/2014'  ,'Philosophy');
 INSERT INTO WRITINGGROUP VALUES('WEEBS'                 ,'Jimmy Chao'       ,'1/2/2014'  ,'Fiction');
-INSERT INTO WRITINGGROUP VALUES('Classified Information','Donald Trump'     ,'10/16/2016','Fiction);
+INSERT INTO WRITINGGROUP VALUES('Classified Information','Donald Trump'     ,'10/16/2016','Fiction');
 
 
 INSERT INTO Publishers VALUES('Core Dump Books'  ,'1234 North Ave' ,'1234567890','abc@yahoo.com');
