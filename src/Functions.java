@@ -59,15 +59,7 @@ public class Functions
         sql="SELECT DISTINCT ";
         for(int i=0; i<inputs.size(); i++)
         {
-            sql+= inputs.get(i);
-            if((i+1)!=inputs.size())
-            {
-                sql+=",";
-            }
-            else
-            {
-                sql+=" ";
-            }
+            sql+= inputs.get(i)+" ";
         }
         switch(type){
             case 1:  
@@ -90,7 +82,7 @@ public class Functions
             {
                 System.out.printf("%-30s", inputs.get(i));
             }
-            System.out.println("\n--------------------------------------------------------------------------------------------");
+            System.out.println("");
             while (rs.next())
             {
                 for(int i=0; i<inputs.size(); i++){
@@ -106,12 +98,12 @@ public class Functions
              //Handle errors for JDBC
             se.printStackTrace();
         }
-        System.out.println("-------------------------------------------------------------------------");
+        
+    
     }
     //cherry pick everything under this comment
-public static void insertBook(Statement stmt)
+    public static void insertBook(Statement stmt)
     {
-        System.out.println("-------------------------------------------------------------------------");
 		//The first part of the query is prepared
         String query = "INSERT INTO Book VALUES(";
         Scanner in = new Scanner(System.in);
@@ -247,15 +239,13 @@ public static void insertBook(Statement stmt)
              //Handle errors for JDBC
             se.printStackTrace();
             }
-            System.out.println("-------------------------------------------------------------------------");
+            
                
         
     }
     
- 
     public static void removeBook(Statement stmt)
     {
-        System.out.println("-------------------------------------------------------------------------");
 		//Prepare the first part of the query
         String query = "DELETE FROM BOOK WHERE BOOKTITLE = ";
         Scanner in = new Scanner(System.in);
@@ -287,19 +277,16 @@ public static void insertBook(Statement stmt)
              //Handle errors for JDBC
             System.out.println("The book you specified does not exist");
             }
-        System.out.println("-------------------------------------------------------------------------");
         
     }
     public static ArrayList<String> DisplayBook(Statement stmt,Boolean getList)
     {
-        
         ArrayList<String> bookList= new ArrayList<String>();
         try{
             String sql;
             sql="SELECT BookTitle FROM Book";
             ResultSet rs = stmt.executeQuery(sql);
-            if(!getList){System.out.printf("%-20s\n","Book Titles");
-            System.out.println("-----------------------");}
+            if(!getList){System.out.printf("%-20s\n","Book Titles");}
             while (rs.next())
             {
                 if(!getList){
@@ -325,7 +312,6 @@ public static void insertBook(Statement stmt)
     }
     public static void DisplayBookInformation(Statement stmt)
     {
-        System.out.println("-------------------------------------------------------------------------");
         Scanner in=new Scanner(System.in);
         System.out.println("Please enter a book title");
         String input= in.nextLine();
@@ -375,7 +361,7 @@ public static void insertBook(Statement stmt)
     }
     public static void updatePublisher(Statement stmt)
     {
-        System.out.println("-------------------------------------------------------------------------");
+        
         System.out.println("Would you like to update a publisher(1) or add a new publisher(2)\n"
                               +"or enter anything else to exit");
         Scanner in = new Scanner(System.in);
@@ -384,7 +370,7 @@ public static void insertBook(Statement stmt)
         if(answer.equals("1"))
          {
 		//prepare first part of query1
-            String query1 = "SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = ";
+            String query1 = "SELECT PUBLISHERADDRESS,PUBLISHERPHONE,PUBLISHEREMAIL FROM PUBLISHERS WHERE PUBLISHERNAME = ";
             String target;
             ResultSet rs;
         
@@ -403,20 +389,27 @@ public static void insertBook(Statement stmt)
 			//check if publisher exists, if yes execute below
                 if(rs.next())
                 {
+                  String pubAdress = rs.getString("PUBLISHERADDRESS");
+                  String pubPhone = rs.getString("PUBLISHERPHONE");
+                  String pubEmail = rs.getString("PUBLISHEREMAIL");
+                    
 				//prepare first part of updates to and PUBLISHERS and BOOK tables
-                    String update1 = "UPDATE PUBLISHERS SET PUBLISHERNAME = ";
+                    String update1 = "INSERT INTO PUBLISHERS VALUES (";
                     String update2 = "UPDATE BOOK SET PUBLISHERNAME = ";
+                    String update3 = "DELETE FROM PUBLISHERS WHERE PUBLISHERNAME = " + "'" + target + "'"; 
 				//get new publisher 
                     System.out.println("What publisher would you like to replace them with?");
                     String target2 = in.nextLine();
 				
 				//append updates
-                    update1 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
+                    update1 += "'" + target2 + "'," + "'" + pubAdress + "'," + "'" + pubPhone + "'," + "'" + pubEmail + "')";
                     update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
                 
                     //execute updates
                     stmt.executeUpdate(update1);
                     stmt.executeUpdate(update2);
+                    stmt.executeUpdate(update3);
+                    
                 }
             
 			//if publisher does not exist, user is informed
@@ -431,7 +424,6 @@ public static void insertBook(Statement stmt)
                 //Handle errors for JDBC
                 se.printStackTrace();
                 }
-            System.out.println("-------------------------------------------------------------------------");
         } 
         
         else if(answer.equals("2"))
@@ -485,7 +477,6 @@ public static void insertBook(Statement stmt)
                 //Handle errors for JDBC
                 se.printStackTrace();
                 }
-            System.out.println("-------------------------------------------------------------------------");
         }
         
     }
@@ -497,8 +488,7 @@ public static void insertBook(Statement stmt)
             String sql;
             sql="SELECT * FROM WritingGroup";
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf(JDBCProject.displayFormat, "Group Name", "HeadWriter", "YearFormed", "Subject","/n");
-            System.out.println("------------------------------------------------------------------------------------------");
+            System.out.printf(JDBCProject.displayFormat, "Group Name", "HeadWriter", "YearFormed", "Subject");
             while (rs.next())
             {
                 //Retrieve by column name
@@ -510,7 +500,7 @@ public static void insertBook(Statement stmt)
                 System.out.printf(JDBCProject.displayFormat, 
                 JDBCProject.dispNull(groupName), JDBCProject.dispNull(HeadWriter), JDBCProject.dispNull(YearFormed), JDBCProject.dispNull(Subject));
             }
-            System.out.println("------------------------------------------------------------------------------------------");
+            System.out.println("-------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) 
@@ -528,8 +518,7 @@ public static void insertBook(Statement stmt)
             String sql;
             sql="SELECT * FROM Publishers";
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf("%-30s%-30s%-30s%-20s\n", "Publisher Name", "PublisherAddress", "PublisherPhone", "PublisherEmail");
-            System.out.println("-----------------------------------------------------------------------------------------------");
+            System.out.printf("%-25s%-35s%-35s%-25s\n", "Publisher Name", "PublisherAddress", "PublisherPhone", "PublisherEmail");
             while (rs.next())
             {
                 //Retrieve by column name
@@ -541,7 +530,7 @@ public static void insertBook(Statement stmt)
                 System.out.printf("%-20s%-20s%-25s%-35s\n", 
                 JDBCProject.dispNull(PublisherName), JDBCProject.dispNull(PublisherAddress), JDBCProject.dispNull(PublisherPhone), JDBCProject.dispNull(PublisherEmail));
             }
-            System.out.println("-----------------------------------------------------------------------------------------------");
+            System.out.println("-------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) {
