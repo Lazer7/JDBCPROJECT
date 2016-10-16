@@ -35,7 +35,7 @@ INSERT INTO WRITINGGROUP VALUES('I Want To Write'       ,'Sarah-Chan'       ,'2/
 INSERT INTO WRITINGGROUP VALUES('The Feel Train'        ,'Senpai Kun'       ,'3/4/2015'  ,'Fiction');
 INSERT INTO WRITINGGROUP VALUES('I Tried So Hard'       ,'Alex Tol'         ,'1/2/2014'  ,'Philosophy');
 INSERT INTO WRITINGGROUP VALUES('WEEBS'                 ,'Jimmy Chao'       ,'1/2/2014'  ,'Fiction');
-INSERT INTO WRITINGGROUP VALUES('Classified Information','Donald Trump'     ,'10/16/2016','Fiction');
+INSERT INTO WRITINGGROUP VALUES('Classified Info'       ,'Donald Trump'     ,'10/16/2016','Fiction');
 
 
 INSERT INTO Publishers VALUES('Core Dump Books'  ,'1234 North Ave' ,'1234567890','abc@yahoo.com');
@@ -51,5 +51,5 @@ INSERT INTO Book VALUES('The Feel Train'        ,'Do Androids Dream of Sheep'   
 INSERT INTO Book VALUES('I Tried So Hard'       ,'The Man Without Qualities'          ,'I Want Out'       ,'11/1/2004'  ,274);
 INSERT INTO Book VALUES('WEEBS'                 ,'Nisekoi'                            ,'Shueisha'         ,'1/8/2011'   ,341);
 INSERT INTO Book VALUES('WEEBS'                 ,'Clannad'                            ,'Shueisha'         ,'4/28/2004'  ,328);
-INSERT INTO Book VALUES('Classified Information','Hillary Clinton Email'              ,'My Life for Books','10/16/2016' ,69);
+INSERT INTO Book VALUES('Classified Info'       ,'Hillary Clinton Email'              ,'My Life for Books','10/16/2016' ,69);
 
