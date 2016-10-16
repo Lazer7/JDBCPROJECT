@@ -46,9 +46,10 @@ INSERT INTO Publishers VALUES('Shueisha'         ,'1234 South Ave' ,'1234567'   
 INSERT INTO Book VALUES('I Want To Write'       ,'Green Eggs and Ham'                 ,'My Life for Books','1/18/1997'  ,46);
 INSERT INTO Book VALUES('HellaHardWriters'      ,'Sometimes the Rain'                 ,'I Want Out'       ,'12/1/2005'  ,282);
 INSERT INTO Book VALUES('I Want To Write'       ,'Sometimes I cry'                    ,'My Life for Books','4/3/2012'   ,520);
-INSERT INTO Book VALUES('HellaHardWriters'      ,'I Was Told There Was Cake          ','WEEBS'            ,'9/5/2000'   ,420);
-INSERT INTO Book VALUES('The Feel Train'        ,'Do Androids Dream of Electric Sheep','Core Dump Books'  ,'1/18/2007'  ,328);
+INSERT INTO Book VALUES('HellaHardWriters'      ,'I Was Told There Was Cake'          ,'Core Dump Books'  ,'9/5/2000'   ,420);
+INSERT INTO Book VALUES('The Feel Train'        ,'Do Androids Dream of Sheep'         ,'Core Dump Books'  ,'1/18/2007'  ,328);
 INSERT INTO Book VALUES('I Tried So Hard'       ,'The Man Without Qualities'          ,'I Want Out'       ,'11/1/2004'  ,274);
 INSERT INTO Book VALUES('WEEBS'                 ,'Nisekoi'                            ,'Shueisha'         ,'1/8/2011'   ,341);
 INSERT INTO Book VALUES('WEEBS'                 ,'Clannad'                            ,'Shueisha'         ,'4/28/2004'  ,328);
 INSERT INTO Book VALUES('Classified Information','Hillary Clinton Email'              ,'My Life for Books','10/16/2016' ,69);
+
