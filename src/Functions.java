@@ -256,13 +256,13 @@ public class Functions
 		//get title, append query
         String bookTitle = in.nextLine();
         ResultSet rs = stmt.executeQuery("SELECT BOOKTITLE FROM BOOK WHERE BOOKTITLE = " +"'" + bookTitle + "'");
-            //check if books exists
+            
             if(rs.next())
             {
             query += "'" + bookTitle + "'";
             }
             
-            else //show error message and exit function if book DNE
+            else
             {
                 System.out.println("The book you specified does not exist\n");
                 return;
@@ -361,53 +361,116 @@ public class Functions
     }
     public static void updatePublisher(Statement stmt)
     {
-		//prepare first part of query1
-        String query1 = "SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = ";
-        String target;
-        ResultSet rs;
-        Scanner in = new Scanner(System.in);
         
-        try
-        {
-			//get publisher, append query 1
-            System.out.println("What Publisher would you like to update?");
-            target = in.nextLine();
-            query1 += "'" + target + "'";
+        System.out.println("Would you like to update a publisher(1) or add a new publisher(2)\n"
+                              +"or enter anything else to exit");
+        Scanner in = new Scanner(System.in);
+            String answer = in.nextLine();
             
-            rs = stmt.executeQuery(query1);
+        if(answer.equals("1"))
+         {
+		//prepare first part of query1
+            String query1 = "SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = ";
+            String target;
+            ResultSet rs;
+        
+        
+            try
+            {
+            
+            
+			//get publisher, append query 1
+                System.out.println("What Publisher would you like to update?");
+                target = in.nextLine();
+                query1 += "'" + target + "'";
+            
+                rs = stmt.executeQuery(query1);
             
 			//check if publisher exists, if yes execute below
-            if(rs.next())
-            {
+                if(rs.next())
+                {
 				//prepare first part of updates to and PUBLISHERS and BOOK tables
-                String update1 = "UPDATE PUBLISHERS SET PUBLISHERNAME = ";
-                String update2 = "UPDATE BOOK SET PUBLISHERNAME = ";
+                    String update1 = "UPDATE PUBLISHERS SET PUBLISHERNAME = ";
+                    String update2 = "UPDATE BOOK SET PUBLISHERNAME = ";
 				//get new publisher 
-                System.out.println("What publisher would you like to replace them with?");
-                String target2 = in.nextLine();
+                    System.out.println("What publisher would you like to replace them with?");
+                    String target2 = in.nextLine();
 				
 				//append updates
-                update1 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
-                update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
+                    update1 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
+                    update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
                 
-                //execute updates
-                stmt.executeUpdate(update1);
-                stmt.executeUpdate(update2);
-            }
+                    //execute updates
+                    stmt.executeUpdate(update1);
+                    stmt.executeUpdate(update2);
+                }
             
 			//if publisher does not exist, user is informed
-            else
-            {
-                System.out.println("This publisher does not exist");
+                else
+                {
+                    System.out.println("This publisher does not exist");
+                }
+        
             }
+            catch (SQLException se) 
+                {
+                //Handle errors for JDBC
+                se.printStackTrace();
+                }
+        } 
+        
+        else if(answer.equals("2"))
+        {
+                try
+            {
+                boolean valid = false;
+                
+                String query = "INSERT INTO PUBLISHERS VALUES(";
+                
+                System.out.println("What is the Publisher's name?");
+                String pubName = in.nextLine();
+                query += "'" + pubName + "',";
+                
+                System.out.println("What is the Publisher's adress?");
+                String pubAdress = in.nextLine();
+	        query += "'" + pubAdress + "',";
+                
+                System.out.println("What is the Publisher's phone? (enter digits only)");
+                String pubPhone = "";
+                    while(!valid)
+                    {
+                        pubPhone = in.nextLine();
+                        valid = true;
+                        
+                        if(!pubPhone.matches("[-+]?\\d*\\.?\\d+") || pubPhone.length() != 10)
+                        {
+                            System.out.println("Inputs can only be numeric and MUST have 10 digits");
+                            valid = false;
+                        }
+                    }
+                
+	        query += "'" + pubPhone + "',";
+                
+               System.out.println("What is the Publisher's email?");
+               String pubEmail = in.nextLine();
+               
+                    while(!pubEmail.contains("@gmail.com") && !pubEmail.contains("@yahoo.com") && !pubEmail.contains("@alexmail.com"))
+                    {
+                        System.out.println("make sure to add a valid suffix: @gmail.com or @yahoo.com or @alexmail.com");
+                        pubEmail = in.nextLine();
+                    }
+                    
+                query += "'" + pubEmail + "')";
+                
+                stmt.executeUpdate(query);
+        
+            }
+            catch (SQLException se) 
+                {
+                //Handle errors for JDBC
+                se.printStackTrace();
+                }
         }
-        
-        catch (SQLException se) 
-            {
-             //Handle errors for JDBC
-            se.printStackTrace();
-            }
-        
         
     }
         public static void DisplayWritingGroup(Statement stmt)
