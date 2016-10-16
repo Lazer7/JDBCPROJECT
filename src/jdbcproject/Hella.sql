@@ -43,5 +43,5 @@ INSERT INTO Publishers VALUES('WEEBS','1234 South Ave','1234567','jkl@yahoo.com'
 INSERT INTO Book VALUES('HellaHardWriters','Sometimes the Rain','WEEBS','1/1/2000',420);
 INSERT INTO Book VALUES('HellaHardWriters','Sometimes I cry','WEEBS','1/1/2000',420);
 INSERT INTO Book VALUES('HellaHardWriters','Engene is a Beach','WEEBS','1/1/2000',420);
-INSERT INTO Book VALUES('HellaHardWriters','RIP','WEEBS','1/1/2000',420);
-INSERT INTO Book VALUES('HellaHardWriters','WHAT','WEEBS','1/1/2000',420);
+INSERT INTO Book VALUES('HellaHardWriters','Death of a Programmer','WEEBS','1/1/2000',420);
+INSERT INTO Book VALUES('HellaHardWriters','WHAT AM I DOING WITH MY LIFE?','WEEBS','1/1/2000',420);
