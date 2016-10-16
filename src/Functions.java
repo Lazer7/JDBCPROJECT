@@ -110,26 +110,126 @@ public class Functions
             
             try
             {
-            //get writingGroup and append query
+            //get writingGroup
             System.out.println("Which writing Group wrote this book?");
-            query += "'" + in.nextLine() + "',";
+            String writingGroup = in.nextLine();
+            
+            //check if writing Group exists
+            ResultSet rs = stmt.executeQuery("SELECT GROUPNAME FROM WRITINGGROUP WHERE GROUPNAME = '" + writingGroup + "'");
+                if(rs.next())
+                {//if writing Group exists, append query
+                    query += "'" + writingGroup + "',";
+                }
+                else
+                {
+                    System.out.printf("The writing group you have entered does not exist\n "
+                                    + "Here is a list of valid groups.\n\n");
+                    rs = stmt.executeQuery("SELECT GROUPNAME FROM WRITINGGROUP");
+                    
+                        while(rs.next())
+                            {System.out.println(rs.getObject("GROUPNAME"));}
+                            System.out.printf("\n Press Any Key To Continue...\n");
+                            in.nextLine();
+                        
+                    //exit out of function    
+                    return;
+                }
+            
 			//get title and append query
             System.out.println("What is the title of the book?");
             query += "'" + in.nextLine() + "',";
-			//get publisher and append query
+            
+            
+	    //get publisher 
             System.out.println("Who published it?");
-            query += "'" + in.nextLine() + "',";
-			//get date published and append query
-            System.out.println("When was it published?");
-            query += "'" + in.nextLine() + "',";
+            String publisher = in.nextLine();
+            
+            //check if publisher exists
+            rs = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = '" + publisher + "'");
+               
+                if(rs.next())
+                {
+                    query += "'" + publisher + "',";
+                }
+                else
+                {
+                    System.out.printf("The publisher you have entered does not exist\n "
+                                    + "Here is a list of valid publishers.\n\n");
+                    rs = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS");
+                    
+                        while(rs.next())
+                            {System.out.println(rs.getObject("PUBLISHERNAME"));}
+                            System.out.printf("\n Press Any Key To Continue...\n");
+                            in.nextLine();
+                        
+                    //exit out of function    
+                    return;
+                }
+            
+            
+			//get date published
+            boolean valid = false;
+            int day = 0,month = 0, year = 0;
+            String date = "";
+                while(!valid)
+                {
+                    try
+                    {   //get month,day, and year seperately, check each one for correctness
+                        System.out.println("What year was it published in?");
+                        year = in.nextInt();
+
+                        System.out.println("On which month? (enter as Integer)");
+                        month = in.nextInt();
+                            if(month > 12 || month <= 0)
+                              {month = 12;}
+                                
+                        System.out.println("On what day? (enter as Integer)");
+                           day = in.nextInt();
+                            if(day > 31 || day <= 0)
+                              {day = 31;}    
+                        
+                        valid = true;
+                    }
+                    
+                        //this loop will continue until the user enters a valid month
+                    
+                        catch(InputMismatchException e)
+                         {
+                             System.out.println("Input Must be an int\n");
+                             in.next();
+                         }
+                  
+                }    
+               valid = false; //for later usage
+               date = month + "/" + day + "/" + year; 
+                
+                query += "'" + date + "',";
+            
+                
+                
 			//get page number and append query
             System.out.println("How many pages does it have?");
-            query += in.nextInt() + ")";
-			//execute query
-            System.out.println(query);
+            int pages = 0;
             
-            
-           
+            while(!valid)
+            {
+                try
+                {
+                    pages = in.nextInt();
+                    valid = true;
+                }
+                
+                catch (InputMismatchException e)
+                {
+                    System.out.println("Input MUST be an Integer");
+                    in.next();
+                }
+            }    
+                
+                query += pages + ")";
+
+                    //execute query
+           stmt.executeUpdate(query);
             
             
             }
@@ -163,7 +263,7 @@ public class Functions
         catch (SQLException se) 
             {
              //Handle errors for JDBC
-            se.printStackTrace();
+            System.out.println("The book you specified does not exist");
             }
         
     }

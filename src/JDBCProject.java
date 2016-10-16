@@ -33,6 +33,7 @@ public class JDBCProject {
         else
             return input;
     }
+    
     public static int displayMenu(Scanner in) 
     {   
         int UserInput=0;
@@ -69,6 +70,8 @@ public class JDBCProject {
         }while(UserInput<=0 || UserInput>10);
         return UserInput;
     }
+    
+    
     public static void main(String[] args) {
         //Prompt the user for the database name, and the credentials.
         //If your database has no credentials, you can update this code to 
@@ -121,13 +124,13 @@ public class JDBCProject {
                         Functions.DisplayBookInformation(stmt);
                         break;
                     case 7: 
-                            Functions.insertBook(stmt); //cherry pick this
+                            Functions.insertBook(stmt); 
                         break;
                     case 8:
-                            Functions.updatePublisher(stmt);//cherry pick this
+                            Functions.updatePublisher(stmt);
                         break;
                     case 9: 
-                            Functions.removeBook(stmt);// cherry pick this
+                            Functions.removeBook(stmt);
                         break;
                     
                 }
