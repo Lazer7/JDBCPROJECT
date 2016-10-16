@@ -104,25 +104,31 @@ public class Functions
     //cherry pick everything under this comment
     public static void insertBook(Statement stmt)
     {
+		//The first part of the query is prepared
         String query = "INSERT INTO Book VALUES(";
         Scanner in = new Scanner(System.in);
             
             try
             {
-            //get writingGroup
+            //get writingGroup and append query
             System.out.println("Which writing Group wrote this book?");
             query += "'" + in.nextLine() + "',";
+			//get title and append query
             System.out.println("What is the title of the book?");
             query += "'" + in.nextLine() + "',";
+			//get publisher and append query
             System.out.println("Who published it?");
             query += "'" + in.nextLine() + "',";
+			//get date published and append query
             System.out.println("When was it published?");
             query += "'" + in.nextLine() + "',";
+			//get page number and append query
             System.out.println("How many pages does it have?");
             query += in.nextInt() + ")";
+			//execute query
             System.out.println(query);
             
-            stmt.executeUpdate(query);
+            
            
             
             
@@ -140,13 +146,17 @@ public class Functions
     
     public static void removeBook(Statement stmt)
     {
+		//Prepare the first part of the query
         String query = "DELETE FROM BOOK WHERE BOOKTITLE = ";
         Scanner in = new Scanner(System.in);
         
         try
         {
         System.out.println("What book do you want to remove?");
+		//get title, append query
         query += "'" + in.nextLine() + "'";
+		
+		//execute query
         stmt.executeUpdate(query);
         }
         
@@ -239,6 +249,7 @@ public class Functions
     }
     public static void updatePublisher(Statement stmt)
     {
+		//prepare first part of query1
         String query1 = "SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = ";
         String target;
         ResultSet rs;
@@ -246,26 +257,33 @@ public class Functions
         
         try
         {
+			//get publisher, append query 1
             System.out.println("What Publisher would you like to update?");
             target = in.nextLine();
             query1 += "'" + target + "'";
             
             rs = stmt.executeQuery(query1);
             
+			//check if publisher exists, if yes execute below
             if(rs.next())
             {
+				//prepare first part of updates to and PUBLISHERS and BOOK tables
                 String update1 = "UPDATE PUBLISHERS SET PUBLISHERNAME = ";
                 String update2 = "UPDATE BOOK SET PUBLISHERNAME = ";
+				//get new publisher 
                 System.out.println("What publisher would you like to replace them with?");
                 String target2 = in.nextLine();
+				
+				//append updates
                 update1 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
                 update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
                 
-                
+                //execute updates
                 stmt.executeUpdate(update1);
                 stmt.executeUpdate(update2);
             }
             
+			//if publisher does not exist, user is informed
             else
             {
                 System.out.println("This publisher does not exist");
@@ -309,6 +327,8 @@ public class Functions
             se.printStackTrace();
         }
     }
+	
+	
     public static void DisplayPublishers(Statement stmt)
     {
                 
