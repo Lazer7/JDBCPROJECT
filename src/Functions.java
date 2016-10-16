@@ -154,19 +154,7 @@ public class Functions
         {
         System.out.println("What book do you want to remove?");
 		//get title, append query
-        String bookTitle = in.nextLine();
-        ResultSet rs = stmt.executeQuery("SELECT BOOKTITLE FROM BOOK WHERE BOOKTITLE = " +"'" + bookTitle + "'");
-            //check if books exists
-            if(rs.next())
-            {
-            query += "'" + bookTitle + "'";
-            }
-            
-            else //show error message and exit function if book DNE
-            {
-                System.out.println("The book you specified does not exist\n");
-                return;
-            }
+        query += "'" + in.nextLine() + "'";
 		
 		//execute query
         stmt.executeUpdate(query);
@@ -368,3 +356,4 @@ public class Functions
             se.printStackTrace();
         }
     }
+}
