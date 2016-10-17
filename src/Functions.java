@@ -414,7 +414,8 @@ public class Functions
         //To update a publisher    
         if(answer.equals("1"))
          {
-		//prepare first part of query1
+             boolean valid = false;
+	    //prepare first part of query1
             String query1 = "SELECT PUBLISHERADDRESS,PUBLISHERPHONE,PUBLISHEREMAIL FROM PUBLISHERS WHERE PUBLISHERNAME = ";
             String target;
             ResultSet rs;
@@ -440,7 +441,24 @@ public class Functions
                     String update3 = "DELETE FROM PUBLISHERS WHERE PUBLISHERNAME = " + "'" + target + "'"; 
                     //get new publisher 
                     System.out.println("What publisher would you like to replace them with?");
-                    String target2 = in.nextLine();				
+                    String target2 = in.nextLine();
+                    	//make sure publisher doesn't already exist
+                          while(!valid)
+							{
+                            ResultSet rss = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = " + "'" + target2 + "'");
+
+                            if(rss.next())
+                            {
+                                System.out.println("This publisher already exists, please enter a valid Publisher");
+                                target2 = in.nextLine();
+                            }
+
+                            else
+                            {
+                                valid = true;
+                            }
+
+                        }
                     //append updates
                     update1 += "'" + target2 + "'," + "'" + pubAdress + "'," + "'" + pubPhone + "'," + "'" + pubEmail + "')";
                     update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";                
