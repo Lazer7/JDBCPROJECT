@@ -38,10 +38,10 @@ INSERT INTO WRITINGGROUP VALUES('WEEBS'                 ,'Jimmy Chao'       ,'1/
 INSERT INTO WRITINGGROUP VALUES('Classified Info'       ,'Donald Trump'     ,'10/16/2016','Fiction');
 
 
-INSERT INTO Publishers VALUES('Core Dump Books'  ,'1234 North Ave' ,'1234567890','abc@yahoo.com');
-INSERT INTO Publishers VALUES('My Life for Books','1234 East Ave'  ,'123456789' ,'def@yahoo.com');
-INSERT INTO Publishers VALUES('I Want Out'       ,'1234 West Ave'  ,'12345678'  ,'ghi@yahoo.com');
-INSERT INTO Publishers VALUES('Shueisha'         ,'1234 South Ave' ,'1234567'   ,'jkl@yahoo.com');
+INSERT INTO Publishers VALUES('Core Dump Books'  ,'1234 North Ave' ,'1212121212','abc@yahoo.com');
+INSERT INTO Publishers VALUES('My Life for Books','1234 East Ave'  ,'3434343434','def@yahoo.com');
+INSERT INTO Publishers VALUES('I Want Out'       ,'1234 West Ave'  ,'5656565656','ghi@yahoo.com');
+INSERT INTO Publishers VALUES('Shueisha'         ,'1234 South Ave' ,'7878787878','jkl@yahoo.com');
 
 INSERT INTO Book VALUES('I Want To Write'       ,'Green Eggs and Ham'                 ,'My Life for Books','1/18/1997'  ,46);
 INSERT INTO Book VALUES('HellaHardWriters'      ,'Sometimes the Rain'                 ,'I Want Out'       ,'12/1/2005'  ,282);

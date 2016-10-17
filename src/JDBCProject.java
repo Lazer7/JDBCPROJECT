@@ -33,6 +33,11 @@ public class JDBCProject {
         else
             return input;
     }
+/**
+ * This displays The Menu and get the User's desired option
+ * @param in is the Scanner to collect the user input
+ * @return the user input 1-10
+ */
     public static int displayMenu(Scanner in) 
     {   
         int UserInput=0;
@@ -95,43 +100,58 @@ public class JDBCProject {
             //DISPLAY THE MENU AND 9 OPTIONS FOR THE USER 
            
             do{
+                //Display the Menu after each option choice
                 userInput=displayMenu(in);
+                //creates a connection to the database
                 stmt = conn.createStatement();
+                //A String ArrayList to hold all the User's Column Selection from the database
                 ArrayList<String> userSelect = new ArrayList<String>();
+                //Do the User's Selected Option
                 switch(userInput)
                 {
                     case 1:
+                        //Display all information of the Writing Group
                         Functions.DisplayWritingGroup(stmt);
                         break;
                     case 2:
+                        //Gets User's desired column selection
                          userSelect=Functions.getList(in, 1);
+                         //Display the columns for the Writing Group
                          Functions.DisplaySelected(stmt, userSelect, 1,"");
                         break;
                     case 3: 
+                        //Display all information of Publishers
                           Functions.DisplayPublishers(stmt);
                         break;
                     case 4: 
+                        //Gets User's desired column selection
                          userSelect=Functions.getList(in, 2);
+                         //Display the columns for the Publishers
                          Functions.DisplaySelected(stmt, userSelect, 2,"");
                         break;
                     case 5: 
+                        //Display all Book Titles
                         Functions.DisplayBook(stmt,false);
                         break;
                     case 6: 
+                        //Display a certain Book Information
                         Functions.DisplayBookInformation(stmt);
                         break;
                     case 7: 
-                            Functions.insertBook(stmt); //cherry pick this
+                        //Insert a New Book
+                            Functions.insertBook(stmt); 
                         break;
                     case 8:
-                            Functions.updatePublisher(stmt);//cherry pick this
+                        //Updates a publisher or insert a new publisher
+                            Functions.updatePublisher(stmt);
                         break;
                     case 9: 
-                            Functions.removeBook(stmt);// cherry pick this
+                        //removes a book from the database
+                            Functions.removeBook(stmt);
                         break;
                     
                 }
-                
+                //empties the user's selection of columns from the array list
                 userSelect.clear();
             }while(userInput != 10);
             

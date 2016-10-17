@@ -1,28 +1,41 @@
 import java.sql.*;
 import java.util.*;
 
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
- * @author Jimmy
+ * Functions to Display information from the database
+ * Add/Update Publisher
+ * Insert a new book
+ * Remove a book
+ * @author Jimmy Chao
+ * @author Alex Tol
  */
 public class Functions 
 {
+    /**
+     * This method is to get the selected columns that the user wants to see
+     * @param in Scanner to collect console input
+     * @param type the table the user wants to select columns from
+     * type 1=WritingGroup
+     * type 2= Publisher
+     * type 3= Books
+     * type 4= Display Books
+     * @return Array list of user's selected columns
+     */
     public static ArrayList getList(Scanner in,int type)
     {
+        //Store all User's column selection in this temporary arrayList
         ArrayList<String> userSelect = new ArrayList<String>();
+        //temporary storage if the user wants to continue adding things to the arrayList
         String contin=" ";
+        //check to see if the user input is correct
         String check;
         boolean firstinput=true;
+        //checks to see if the user wants to continue
         while(!contin.equals("n")){
             System.out.println("Type in the words you want to see");
+            //User inputs column name
             check= in.next();
+            //ALL OF THESE IF STATMENTS ARE HERE TO CHECK IF THE STRING IS A NAME OF AN ATTRIBUTE FROM EACH TABLE
             if((type==1||type==4)&&(check.equals("GroupName")||check.equals("HeadWriter")||check.equals("YearFormed")||check.equals("Subject")))
             {
                 userSelect.add(check);
@@ -48,19 +61,32 @@ public class Functions
                 break;
             }
             else{System.out.println("Invalid input");}
+            //ask if user wants to continue
             contin=in.nextLine();
             firstinput=false;
         }   
+        //return the arraylist of Column selections
         return userSelect;
     }
+    /**
+     * Display Selected information from what the user wants to see
+     * @param stmt to send SQL statements to the database
+     * @param inputs the columns the user wants to see
+     * @param type which table the user wants to view
+     * @param book the book title if they want to see certain information from a book
+     */
     public static void DisplaySelected(Statement stmt, ArrayList<String> inputs,int type,String book)
     {
+        //creating the SQL statement and choosing which table to view from
         String sql;
         sql="SELECT DISTINCT ";
         for(int i=0; i<inputs.size(); i++)
         {
-            sql+= inputs.get(i)+" ";
+            sql+= inputs.get(i);
+            if((i+1)!=inputs.size()){sql+=",";}
+            
         }
+        sql+=" ";
         switch(type){
             case 1:  
                 sql+="FROM WritingGroup";
@@ -75,14 +101,16 @@ public class Functions
                 sql ="SELECT * FROM Book NATURAL JOIN PUBLISHERS NATURAL JOIN WRITINGGROUP WHERE BookTitle  = "+ "\'" +book+ "\'";
                 break;
         }
+        //executes the sql line and display the information
         try
         {
             ResultSet rs = stmt.executeQuery(sql);
+            System.out.println("----------------------------------------------------------------------------------------------------");
             for(int i=0; i<inputs.size(); i++)
             {
                 System.out.printf("%-30s", inputs.get(i));
             }
-            System.out.println("");
+            System.out.println("\n----------------------------------------------------------------------------------------------------");
             while (rs.next())
             {
                 for(int i=0; i<inputs.size(); i++){
@@ -98,24 +126,28 @@ public class Functions
              //Handle errors for JDBC
             se.printStackTrace();
         }
-        
+        System.out.println("----------------------------------------------------------------------------------------------------");
     
     }
-    //cherry pick everything under this comment
+    /**
+     * Method to insert a certain book into the database
+     * @param stmt 
+     */
     public static void insertBook(Statement stmt)
     {
 		//The first part of the query is prepared
+        System.out.println("----------------------------------------------------------------------------------------------------");
         String query = "INSERT INTO Book VALUES(";
         Scanner in = new Scanner(System.in);
             
             try
             {
-            //get writingGroup
-            System.out.println("Which writing Group wrote this book?");
-            String writingGroup = in.nextLine();
-            
-            //check if writing Group exists
-            ResultSet rs = stmt.executeQuery("SELECT GROUPNAME FROM WRITINGGROUP WHERE GROUPNAME = '" + writingGroup + "'");
+                //get writingGroup
+                System.out.println("Which writing Group wrote this book?");
+                String writingGroup = in.nextLine();
+
+                //check if writing Group exists
+                ResultSet rs = stmt.executeQuery("SELECT GROUPNAME FROM WRITINGGROUP WHERE GROUPNAME = '" + writingGroup + "'");
                 if(rs.next())
                 {//if writing Group exists, append query
                     query += "'" + writingGroup + "',";
@@ -134,19 +166,14 @@ public class Functions
                     //exit out of function    
                     return;
                 }
-            
-			//get title and append query
-            System.out.println("What is the title of the book?");
-            query += "'" + in.nextLine() + "',";
-            
-            
-	    //get publisher 
-            System.out.println("Who published it?");
-            String publisher = in.nextLine();
-            
-            //check if publisher exists
-            rs = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = '" + publisher + "'");
-               
+		//get title and append query
+                System.out.println("What is the title of the book?");
+                query += "'" + in.nextLine() + "',";
+                //get publisher 
+                System.out.println("Who published it?");
+                String publisher = in.nextLine();
+                //check if publisher exists
+                rs = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = '" + publisher + "'");              
                 if(rs.next())
                 {
                     query += "'" + publisher + "',";
@@ -167,10 +194,10 @@ public class Functions
                 }
             
             
-			//get date published
-            boolean valid = false;
-            int day = 0,month = 0, year = 0;
-            String date = "";
+		//get date published
+                boolean valid = false;
+                int day = 0,month = 0, year = 0;
+                String date = "";
                 while(!valid)
                 {
                     try
@@ -198,58 +225,50 @@ public class Functions
                              System.out.println("Input Must be an int\n");
                              in.next();
                          }
-                  
                 }    
-               valid = false; //for later usage
-               date = month + "/" + day + "/" + year; 
-                
+                valid = false; //for later usage
+                date = month + "/" + day + "/" + year; 
                 query += "'" + date + "',";
-            
-                
-                
-			//get page number and append query
-            System.out.println("How many pages does it have?");
-            int pages = 0;
-            
-            while(!valid)
-            {
-                try
+                //get page number and append query
+                System.out.println("How many pages does it have?");
+                int pages = 0;
+                while(!valid)
                 {
-                    pages = in.nextInt();
-                    valid = true;
-                }
-                
-                catch (InputMismatchException e)
-                {
-                    System.out.println("Input MUST be an Integer");
-                    in.next();
-                }
-            }    
+                    try
+                    {
+                        pages = in.nextInt();
+                        valid = true;
+                    }
+
+                    catch (InputMismatchException e)
+                    {
+                        System.out.println("Input MUST be an Integer");
+                        in.next();
+                    }
+                }    
                 
                 query += pages + ")";
 
-                    //execute query
-           stmt.executeUpdate(query);
-            
-            
-            }
-            
+                //execute query
+                stmt.executeUpdate(query);
+            }            
             catch (SQLException se) 
             {
              //Handle errors for JDBC
             se.printStackTrace();
             }
-            
-               
-        
+            System.out.println("----------------------------------------------------------------------------------------------------");
     }
-    
+    /**
+     * Removes a Book from the database
+     * @param stmt 
+     */
     public static void removeBook(Statement stmt)
     {
-		//Prepare the first part of the query
+	//Prepare the first part of the query
+        System.out.println("----------------------------------------------------------------------------------------------------");
         String query = "DELETE FROM BOOK WHERE BOOKTITLE = ";
         Scanner in = new Scanner(System.in);
-        
         try
         {
         System.out.println("What book do you want to remove?");
@@ -267,8 +286,7 @@ public class Functions
                 System.out.println("The book you specified does not exist\n");
                 return;
             }
-		
-		//execute query
+	//execute query
         stmt.executeUpdate(query);
         }
         
@@ -276,17 +294,27 @@ public class Functions
             {
              //Handle errors for JDBC
             System.out.println("The book you specified does not exist");
-            }
-        
+            }  
+        System.out.println("----------------------------------------------------------------------------------------------------");
     }
+    /**
+     * Collects the Columns from the book table to display
+     * @param stmt the Sql statement to be sent to be executed
+     * @param getList if we are displaying certain information for a book or just book titles
+     * @return ArrayList
+     */
     public static ArrayList<String> DisplayBook(Statement stmt,Boolean getList)
     {
+        //Holds all user input for a column selection
         ArrayList<String> bookList= new ArrayList<String>();
         try{
             String sql;
             sql="SELECT BookTitle FROM Book";
             ResultSet rs = stmt.executeQuery(sql);
-            if(!getList){System.out.printf("%-20s\n","Book Titles");}
+            //display all book titles
+            if(!getList){System.out.printf("%-20s\n","Book Titles");
+            System.out.println("----------------------------------------------------------------------------------------------------");}
+            
             while (rs.next())
             {
                 if(!getList){
@@ -297,33 +325,44 @@ public class Functions
                 }
                 else
                 {
+                    //add the column to the arraylist
                     bookList.add(rs.getString("BookTitle"));
                 }
             }
-            if(!getList){System.out.println("-------------------------------------------------------------------------");}
+            if(!getList){System.out.println("----------------------------------------------------------------------------------------------------");}
             rs.close();
         }
         catch (SQLException se) {
             //Handle errors for JDBC
             se.printStackTrace();
         }
-        
+        //return column selection
         return bookList;
     }
+    /**
+     * Display all Book Information
+     * @param stmt 
+     */
     public static void DisplayBookInformation(Statement stmt)
     {
         Scanner in=new Scanner(System.in);
+        //finds the book title
+        System.out.println("----------------------------------------------------------------------------------------------------");
         System.out.println("Please enter a book title");
         String input= in.nextLine();
+        //collect user's column selection for the table
         ArrayList<String> bookList=DisplayBook(stmt,true);
         boolean bookfound=false;
+        //CHECKS TO SEE IF BOOK EXIST
         for(int i=0; i<bookList.size(); i++)
         {
             String x=bookList.get(i);
             if((input.trim().equals(x.trim()))){bookfound=true;}
         }
+        //IF BOOK EXIST
         if(bookfound)
         {
+            //DISPLAY ALL INFORMATION IF THE ARRAY LIST CONTAIN ALL or *
             ArrayList<String> Select=getList(in,4);
             if((Select.get(0).equals("*"))){
                 try{
@@ -347,7 +386,7 @@ public class Functions
                                 ,JDBCProject.dispNull(groupName),JDBCProject.dispNull(HeadWriter),JDBCProject.dispNull(YearFormed),JDBCProject.dispNull(Subject)
                                 ,JDBCProject.dispNull(PublisherName),JDBCProject.dispNull(PublisherAddress),JDBCProject.dispNull(PublisherPhone),JDBCProject.dispNull(PublisherEmail));
                     }
-                    System.out.println("-------------------------------------------------------------------------");
+                   System.out.println("----------------------------------------------------------------------------------------------------");
                     rs.close();
                 }
                 catch (SQLException se) {
@@ -355,83 +394,80 @@ public class Functions
                     se.printStackTrace();
                 }
             }
+            //OR ELSE DISPLAY INFORMATION THAT THE USER WANTS
             else{DisplaySelected(stmt, Select,4,input);}
         }
         else{System.out.println("Book not Found");}
     }
+    /**
+     * Updates a publisher or insert a new publisher
+     * @param stmt 
+     */
     public static void updatePublisher(Statement stmt)
     {
-        
+        //Ask if user wants to update a publisher or insert a new one
+        System.out.println("----------------------------------------------------------------------------------------------------");
         System.out.println("Would you like to update a publisher(1) or add a new publisher(2)\n"
                               +"or enter anything else to exit");
         Scanner in = new Scanner(System.in);
             String answer = in.nextLine();
-            
+        //To update a publisher    
         if(answer.equals("1"))
          {
 		//prepare first part of query1
             String query1 = "SELECT PUBLISHERADDRESS,PUBLISHERPHONE,PUBLISHEREMAIL FROM PUBLISHERS WHERE PUBLISHERNAME = ";
             String target;
             ResultSet rs;
-        
-        
             try
             {
-            
-            
-			//get publisher, append query 1
+                //get publisher, append query 1
                 System.out.println("What Publisher would you like to update?");
                 target = in.nextLine();
                 query1 += "'" + target + "'";
             
                 rs = stmt.executeQuery(query1);
             
-			//check if publisher exists, if yes execute below
+		//check if publisher exists, if yes execute below
                 if(rs.next())
                 {
-                  String pubAdress = rs.getString("PUBLISHERADDRESS");
-                  String pubPhone = rs.getString("PUBLISHERPHONE");
-                  String pubEmail = rs.getString("PUBLISHEREMAIL");
+                    String pubAdress = rs.getString("PUBLISHERADDRESS");
+                    String pubPhone = rs.getString("PUBLISHERPHONE");
+                    String pubEmail = rs.getString("PUBLISHEREMAIL");
                     
-				//prepare first part of updates to and PUBLISHERS and BOOK tables
+                    //prepare first part of updates to and PUBLISHERS and BOOK tables
                     String update1 = "INSERT INTO PUBLISHERS VALUES (";
                     String update2 = "UPDATE BOOK SET PUBLISHERNAME = ";
                     String update3 = "DELETE FROM PUBLISHERS WHERE PUBLISHERNAME = " + "'" + target + "'"; 
-				//get new publisher 
+                    //get new publisher 
                     System.out.println("What publisher would you like to replace them with?");
-                    String target2 = in.nextLine();
-				
-				//append updates
+                    String target2 = in.nextLine();				
+                    //append updates
                     update1 += "'" + target2 + "'," + "'" + pubAdress + "'," + "'" + pubPhone + "'," + "'" + pubEmail + "')";
-                    update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";
-                
+                    update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";                
                     //execute updates
                     stmt.executeUpdate(update1);
                     stmt.executeUpdate(update2);
-                    stmt.executeUpdate(update3);
-                    
+                    stmt.executeUpdate(update3);                   
                 }
-            
-			//if publisher does not exist, user is informed
+                //if publisher does not exist, user is informed
                 else
                 {
                     System.out.println("This publisher does not exist");
                 }
-        
             }
             catch (SQLException se) 
-                {
+            {
                 //Handle errors for JDBC
                 se.printStackTrace();
-                }
+            }
         } 
-        
+        //to insert a new publisher
         else if(answer.equals("2"))
         {
-                try
+            try
             {
                 boolean valid = false;
-                
+                //creating the sql statement to insert a new publisher
                 String query = "INSERT INTO PUBLISHERS VALUES(";
                 
                 System.out.println("What is the Publisher's name?");
@@ -478,17 +514,22 @@ public class Functions
                 se.printStackTrace();
                 }
         }
-        
+        System.out.println("----------------------------------------------------------------------------------------------------");
     }
-        public static void DisplayWritingGroup(Statement stmt)
-    {
-                
+    /**
+     * Displays all information for the Writing Group
+     * @param stmt 
+     */
+    public static void DisplayWritingGroup(Statement stmt)
+    {               
         try
         {
+            //creating SQL statement 
             String sql;
             sql="SELECT * FROM WritingGroup";
             ResultSet rs = stmt.executeQuery(sql);
             System.out.printf(JDBCProject.displayFormat, "Group Name", "HeadWriter", "YearFormed", "Subject");
+            System.out.println("----------------------------------------------------------------------------------------------------");
             while (rs.next())
             {
                 //Retrieve by column name
@@ -500,7 +541,7 @@ public class Functions
                 System.out.printf(JDBCProject.displayFormat, 
                 JDBCProject.dispNull(groupName), JDBCProject.dispNull(HeadWriter), JDBCProject.dispNull(YearFormed), JDBCProject.dispNull(Subject));
             }
-            System.out.println("-------------------------------------------------------------------------");
+           System.out.println("----------------------------------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) 
@@ -508,17 +549,21 @@ public class Functions
              //Handle errors for JDBC
             se.printStackTrace();
         }
-    }
-	
-	
+    }   
+    /**
+     * Display all Publisher Information
+     * @param stmt 
+     */
     public static void DisplayPublishers(Statement stmt)
     {
                 
         try{
+            //Creating sql statement 
             String sql;
             sql="SELECT * FROM Publishers";
             ResultSet rs = stmt.executeQuery(sql);
-            System.out.printf("%-25s%-35s%-35s%-25s\n", "Publisher Name", "PublisherAddress", "PublisherPhone", "PublisherEmail");
+            System.out.printf("%-30s%-30s%-30s%-25s\n", "Publisher Name", "PublisherAddress", "PublisherPhone", "PublisherEmail");
+            System.out.println("---------------------------------------------------------------------------------------------------------");
             while (rs.next())
             {
                 //Retrieve by column name
@@ -530,7 +575,7 @@ public class Functions
                 System.out.printf("%-20s%-20s%-25s%-35s\n", 
                 JDBCProject.dispNull(PublisherName), JDBCProject.dispNull(PublisherAddress), JDBCProject.dispNull(PublisherPhone), JDBCProject.dispNull(PublisherEmail));
             }
-            System.out.println("-------------------------------------------------------------------------");
+            System.out.println("---------------------------------------------------------------------------------------------------------");
             rs.close();
         }
         catch (SQLException se) {
