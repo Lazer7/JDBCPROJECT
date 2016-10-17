@@ -153,7 +153,8 @@ public class Functions
                     query += "'" + writingGroup + "',";
                 }
                 else
-                {
+                {   //if writting group doesn't exist, show list of valid groups and exit
+                    //function
                     System.out.printf("The writing group you have entered does not exist\n "
                                     + "Here is a list of valid groups.\n\n");
                     rs = stmt.executeQuery("SELECT GROUPNAME FROM WRITINGGROUP");
@@ -179,7 +180,7 @@ public class Functions
                     query += "'" + publisher + "',";
                 }
                 else
-                {
+                {   //if publisher doesn't exist, show list of valid publishers, and exit function
                     System.out.printf("The publisher you have entered does not exist\n "
                                     + "Here is a list of valid publishers.\n\n");
                     rs = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS");
@@ -218,7 +219,7 @@ public class Functions
                         valid = true;
                     }
                     
-                        //this loop will continue until the user enters a valid month
+                        //this loop will continue until the user enters a valid date
                     
                         catch(InputMismatchException e)
                          {
@@ -275,7 +276,7 @@ public class Functions
 		//get title, append query
         String bookTitle = in.nextLine();
         ResultSet rs = stmt.executeQuery("SELECT BOOKTITLE FROM BOOK WHERE BOOKTITLE = " +"'" + bookTitle + "'");
-            
+            //checks if books exists
             if(rs.next())
             {
             query += "'" + bookTitle + "'";
@@ -430,10 +431,10 @@ public class Functions
             
 		//check if publisher exists, if yes execute below
                 if(rs.next())
-                {
-                    String pubAdress = rs.getString("PUBLISHERADDRESS");
-                    String pubPhone = rs.getString("PUBLISHERPHONE");
-                    String pubEmail = rs.getString("PUBLISHEREMAIL");
+                {//prepare the attributes of the old publisher, so we can add them in with the new publisher
+                  String pubAdress = rs.getString("PUBLISHERADDRESS");
+                  String pubPhone = rs.getString("PUBLISHERPHONE");
+                  String pubEmail = rs.getString("PUBLISHEREMAIL");
                     
                     //prepare first part of updates to and PUBLISHERS and BOOK tables
                     String update1 = "INSERT INTO PUBLISHERS VALUES (";
@@ -442,24 +443,25 @@ public class Functions
                     //get new publisher 
                     System.out.println("What publisher would you like to replace them with?");
                     String target2 = in.nextLine();
-                    	//make sure publisher doesn't already exist
-                          while(!valid)
-							{
+                    //check to make sure user isn't trying to add an already existing publisher
+                        while(!valid)
+                        {
                             ResultSet rss = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = " + "'" + target2 + "'");
-
+                            
                             if(rss.next())
                             {
                                 System.out.println("This publisher already exists, please enter a valid Publisher");
                                 target2 = in.nextLine();
                             }
-
+                            
                             else
                             {
                                 valid = true;
                             }
-
+                            
                         }
-                    //append updates
+				
+				//append updates
                     update1 += "'" + target2 + "'," + "'" + pubAdress + "'," + "'" + pubPhone + "'," + "'" + pubEmail + "')";
                     update2 += "'" + target2 + "' WHERE PUBLISHERNAME = " + "'" + target + "'";                
                     //execute updates
@@ -490,6 +492,24 @@ public class Functions
                 
                 System.out.println("What is the Publisher's name?");
                 String pubName = in.nextLine();
+                //check to make sure the user isn't trying to add an already existing publisher
+                    while(!valid)
+                        {
+                            ResultSet rss = stmt.executeQuery("SELECT PUBLISHERNAME FROM PUBLISHERS WHERE PUBLISHERNAME = " + "'" + pubName + "'");
+                            
+                            if(rss.next())
+                            {
+                                System.out.println("This publisher already exists, please enter a valid Publisher");
+                                pubName = in.nextLine();
+                            }
+                            
+                            else
+                            {
+                                valid = true;
+                            }
+                            
+                        }
+                valid = false;
                 query += "'" + pubName + "',";
                 
                 System.out.println("What is the Publisher's adress?");
